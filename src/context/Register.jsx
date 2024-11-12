@@ -1,18 +1,17 @@
 import React, {useContext, useState} from 'react';
 import { useAutenticador } from './Context';
 
-
-const Login = ()=>{
+const Register= () =>{
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const {login} =useAutenticador();
+    const [password, setPassword] =useState('');
+    const {register} = useAutenticador();
 
-    const handleSubmit = (e)=>{
+    const handleSubmit = (e) => {
         e.preventDefault();
-        login(email, password);
-    };
-
-    return (
+        register(email, password);
+      };
+    
+      return (
         <form onSubmit={handleSubmit}>
           <input
             type="email"
@@ -26,9 +25,9 @@ const Login = ()=>{
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button type="submit">Login</button>
+          <button type="submit">Register</button>
         </form>
       );
-};
-
-export default Login;
+    };
+    
+    export default Register;
