@@ -1,6 +1,5 @@
 // src/context/AuthContext.js
 import React, { createContext, useState, useEffect, useContext } from "react";
-
 const Context = createContext();
 export const useAutenticador = () => useContext(Context);
 
@@ -8,7 +7,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [online, setOnline] = useState(false);
-
+  
   useEffect(() => {
     const usuarioArmazenado = JSON.parse(localStorage.getItem('user'));
     const tokenArmazenado = localStorage.getItem('token');
@@ -16,10 +15,16 @@ export const AuthProvider = ({ children }) => {
     if (usuarioArmazenado && tokenArmazenado) {
       setUser(usuarioArmazenado);
       setOnline(true);
+      console.log("já está logado");
+      
     } else {
       setOnline(false);
+      console.log("usuário não encontrado");
+      
     }
     setLoading(false);
+
+  
   }, []);
 
   const login = async (email, password) => {
@@ -68,6 +73,27 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     setOnline(false);
   };
+
+  const getUsuario =  async (token) =>{
+    try
+    { const resposta = await fetch('http://localhost:4000/users/me', {
+      method: GET,
+      headers:{
+        'Authorization': `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    });
+    if(!resposta){ throw new Error(
+      `Erro:${resposta.status} - ${resposta.statusText}`
+    );
+        
+    }
+
+    const dados = await resposta.json();
+    return dados;
+
+    }catch{}
+  }
 
   return (
     <Context.Provider value={{ user, loading, login, register, logout, online }}>

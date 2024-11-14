@@ -7,17 +7,18 @@ import {
   faGooglePlusG,
   faLinkedinIn,
 } from "@fortawesome/free-brands-svg-icons";
-
+import { useNavigate } from 'react-router-dom';
 
 
 const Login = ()=>{
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const {login} =useAutenticador();
-
+    const navigate = useNavigate()
     const handleSubmit = (e)=>{
         e.preventDefault();
         login(email, password);
+        navigate('/')
     };
 
     return (
