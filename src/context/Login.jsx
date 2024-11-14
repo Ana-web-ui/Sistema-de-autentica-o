@@ -1,5 +1,13 @@
 import React, {useContext, useState} from 'react';
 import { useAutenticador } from './Context';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faFacebookF,
+  faGithub,
+  faGooglePlusG,
+  faLinkedinIn,
+} from "@fortawesome/free-brands-svg-icons";
+
 
 
 const Login = ()=>{
@@ -13,21 +21,40 @@ const Login = ()=>{
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <button type="submit">Login</button>
-        </form>
+      
+      <form onSubmit={handleSubmit}>
+        <h1>Sing In</h1>
+        <div className="social-icons">
+          <a href="#" className="icon">
+            <FontAwesomeIcon icon={faGooglePlusG} />
+          </a>
+          <a href="#" className="icon">
+            <FontAwesomeIcon icon={faFacebookF} />
+          </a>
+          <a href="#" className="icon">
+            <FontAwesomeIcon icon={faGithub} />
+          </a>
+          <a href="#" className="icon">
+            <FontAwesomeIcon icon={faLinkedinIn} />
+          </a>
+        </div>
+        <span>ou use seu email e senha</span>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <a href="#">Esqueceu a sua senha?</a>
+        <button type="submit">Login</button>
+      </form>
+    
       );
 };
 

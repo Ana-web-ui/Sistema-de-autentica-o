@@ -10,44 +10,40 @@ export const AuthProvider = ({ children }) => {
   const [online, setOnline] = useState(false);
 
   useEffect(() => {
-    const usuarioArmazenado =localStorage.getItem('user')
-    const tokenArmazenado =localStorage.getItem('token')
+    const usuarioArmazenado = JSON.parse(localStorage.getItem('user'));
+    const tokenArmazenado = localStorage.getItem('token');
+    
     if (usuarioArmazenado && tokenArmazenado) {
       setUser(usuarioArmazenado);
       setOnline(true);
-
-      console.log(online);
-      
+    } else {
+      setOnline(false);
     }
     setLoading(false);
   }, []);
 
   const login = async (email, password) => {
     try {
-      
-        const resposta = await fetch("http://localhost:4000/auth/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
-        });
-        if (resposta.status === 200 || resposta.status === 201) {
-          const dados = await resposta.json()
-          const {token, refreshToken, email:userEmail}= dados
-          setUser(dados);
-          setOnline(true);
-          console.log(online);
-          
-          localStorage.setItem("token", dados.token);
-          localStorage.setItem("refreshToken", dados.refreshToken);
-          localStorage.setItem("user", JSON.stringify(dados));
+      const resposta = await fetch("http://localhost:4000/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
-          console.log("tá dentro");
-          
-          
-        }
+      if (resposta.status === 200 || resposta.status === 201) {
+        const dados = await resposta.json();
+        const { token, refreshToken, email: userEmail } = dados;
+        setUser(dados);
+        setOnline(true);
+        console.log(online);
+        
+        
+        localStorage.setItem("token", token);
+        localStorage.setItem("refreshToken", refreshToken);
+        localStorage.setItem("user", JSON.stringify(dados));
+      }
     } catch (error) {
-       console.log(error);
-      
+      console.log(error);
     }
   };
 
@@ -58,11 +54,10 @@ export const AuthProvider = ({ children }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-      if (resposta.status === 200 || resposta.status === 201){
+
+      if (resposta.status === 200 || resposta.status === 201) {
         console.log("Sucesso!");
-        
       }
-      // login(email, password); // Realiza login automaticamente após cadastro
     } catch (error) {
       console.error("Registration error", error);
     }
@@ -80,5 +75,3 @@ export const AuthProvider = ({ children }) => {
     </Context.Provider>
   );
 };
-
-

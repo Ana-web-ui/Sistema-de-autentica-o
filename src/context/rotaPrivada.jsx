@@ -3,7 +3,9 @@ import { useAutenticador } from "./Context";
 import { Navigate} from 'react-router-dom';
 
 const RotaPrivada = ({children})=>{
-    const {online} = useAutenticador();
+    const {online, loading} = useAutenticador();
+
+    if (loading) return null; 
     
     return online? children : <Navigate to = '/login'/>
 }
