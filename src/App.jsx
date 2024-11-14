@@ -1,15 +1,15 @@
 import React from "react";
-import RotaPrivada from "../context/rotaPrivada"
+import RotaPrivada from "./context/rotaPrivada"
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Login from "../context/Login"
-import Context from "../context/Context";
-import Register from "../context/Register"
-import PaginaPrivada from "../pages/paginaPrivada"
+import Login from "./context/Login"
+import {AuthProvider} from "./context/Context";
+import Register from "./context/Register"
+import PaginaPrivada from "./pages/paginaPrivada"
 function App() {
 
 
 return(
-  <Context>
+  <AuthProvider>
     <Router>
       <Routes>
         <Route path="/" element={
@@ -20,20 +20,14 @@ return(
 
           } />
 
-          <Route path="/" element={<Login/>}/>
-          <Route path="/" element={<Register/>}/>
+          <Route path="/login" element={<Login/>}/>
+          <Route path="/register" element={<Register/>}/>
 
       </Routes>
     </Router>
-  </Context>
+  </AuthProvider>
 )
   
+}
 
-}<Route path="/" element={<Home />} />}#//elementocaminhopaggina<></><Route 
-            path="/about" 
-            element={
-              <PrivateRoute>
-                <About />
-              </PrivateRoute>
-            } 
-          />
+export default App;

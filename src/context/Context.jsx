@@ -10,43 +10,59 @@ export const AuthProvider = ({ children }) => {
   const [online, setOnline] = useState(false);
 
   useEffect(() => {
-    if (online) {
-      setUser(JSON.parse(storedUser));
+    const usuarioArmazenado =localStorage.getItem('user')
+    const tokenArmazenado =localStorage.getItem('token')
+    if (usuarioArmazenado && tokenArmazenado) {
+      setUser(usuarioArmazenado);
+      setOnline(true);
+
+      console.log(online);
+      
     }
     setLoading(false);
   }, []);
 
   const login = async (email, password) => {
     try {
-      if (!online) {
+      
         const resposta = await fetch("http://localhost:4000/auth/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password }),
         });
         if (resposta.status === 200 || resposta.status === 201) {
-          localStorage.setItem("token", token);
-          localStorage.setItem("refreshToken", refreshToken);
-          localStorage.setItem("user", JSON.stringify({ email: email }));
-          setUser({ email: email });
+          const dados = await resposta.json()
+          const {token, refreshToken, email:userEmail}= dados
+          setUser(dados);
           setOnline(true);
+          console.log(online);
+          
+          localStorage.setItem("token", dados.token);
+          localStorage.setItem("refreshToken", dados.refreshToken);
+          localStorage.setItem("user", JSON.stringify(dados));
+
+          console.log("tá dentro");
+          
+          
         }
-      }
     } catch (error) {
-      if (online) {
-        console.log("Usuário já está logado!");
-      }
+       console.log(error);
+      
     }
   };
 
   const register = async (email, password) => {
     try {
-      const resultado = await fetch("http://localhost:4000/users/create", {
+      const resposta = await fetch("http://localhost:4000/users/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-      login(email, password); // Realiza login automaticamente após cadastro
+      if (resposta.status === 200 || resposta.status === 201){
+        console.log("Sucesso!");
+        
+      }
+      // login(email, password); // Realiza login automaticamente após cadastro
     } catch (error) {
       console.error("Registration error", error);
     }
@@ -59,10 +75,10 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, online }}>
+    <Context.Provider value={{ user, loading, login, register, logout, online }}>
       {children}
-    </AuthContext.Provider>
+    </Context.Provider>
   );
 };
 
-export default Context;
+
