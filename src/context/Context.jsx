@@ -77,10 +77,10 @@ export const AuthProvider = ({ children }) => {
   const getUsuario =  async (token) =>{
     try
     { const resposta = await fetch('http://localhost:4000/users/me', {
-      method: GET,
+      method: 'POST',
       headers:{
         'Authorization': `Bearer ${token}`,
-        "Content-Type": "application/json"
+        
       }
     });
     if(!resposta){ throw new Error(
@@ -96,7 +96,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   return (
-    <Context.Provider value={{ user, loading, login, register, logout, online }}>
+    <Context.Provider value={{ user, loading, login, register, logout, online, getUsuario }}>
       {children}
     </Context.Provider>
   );
